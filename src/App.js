@@ -8,6 +8,7 @@ import './style.css';
 import Header from './Header';
 import Loader from './Loader';
 import SignInPage from './pages/auth/SignInPage';
+import SignUpPage from './pages/auth/SignUpPage';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -62,7 +63,8 @@ function App() {
 					<FactsList facts={facts} setFacts={setFacts} categories={CATEGORIES} />
 				)}
 			</main> */}
-			<SignInPage />
+			{/* <SignInPage /> */}
+			<SignUpPage />
 		</>
 	);
 }
