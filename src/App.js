@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CategoryFilter from './CategoryFilter';
 import FactForm from './FactForm';
 import FactsList from './FactsList';
-// import supabase from './supabase';
 
 import './style.css';
 import Header from './Header';
 import Loader from './Loader';
 import SignInPage from './pages/auth/SignInPage';
 import SignUpPage from './pages/auth/SignUpPage';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from './firebase';
+import {
+	QueryDocumentSnapshot,
+	collection,
+	doc,
+	getDocs,
+	onSnapshot,
+	query,
+	where,
+} from 'firebase/firestore';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -28,32 +37,52 @@ function App() {
 	const [facts, setFacts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [currentCategory, setCurrentCategory] = useState('all');
+	const [authUser, setAuthUser] = useState(null);
 
-	// useEffect(
-	// 	function () {
-	// 		async function getFacts() {
-	// 			setIsLoading(true);
+	useEffect(() => {
+		const listen = onAuthStateChanged(auth, (user) => {
+			if (user) {
+				setAuthUser(user);
+			} else {
+				setAuthUser(null);
+			}
+		});
 
-	// 			let query = supabase.from('facts').select('*');
+		const getFacts = async () => {
+			setIsLoading(true);
 
-	// 			if (currentCategory !== 'all') query = query.eq('category', currentCategory);
+			const ref = collection(db, 'facts');
+			const snapshot = await getDocs(ref);
 
-	// 			const { data: facts, error } = await query.order('votesInteresting', {
-	// 				ascending: false,
-	// 			});
+			let facts = snapshot.docs.map((doc) => ({
+				...doc.data(),
+				id: doc.id,
+			}));
 
-	// 			if (!error) setFacts(facts);
-	// 			else alert('There was a problem getting the data!');
-	// 			setIsLoading(false);
-	// 		}
-	// 		getFacts();
-	// 	},
-	// 	[currentCategory]
-	// );
+			if (currentCategory !== 'all') {
+				const q = query(ref, where('category', '==', currentCategory));
+				const catSnapshot = await getDocs(q);
+
+				facts = catSnapshot.docs.map((doc) => ({
+					...doc.data(),
+					id: doc.id,
+				}));
+			}
+
+			setIsLoading(false);
+			setFacts(facts);
+		};
+		getFacts();
+
+		return () => {
+			listen();
+		};
+	}, [currentCategory]);
 
 	return (
 		<>
-			{/* <Header showForm={showForm} setShowForm={setShowForm} />
+			{/* {authUser ? 'Signed In!' : 'Signed Out!'} */}
+			<Header showForm={showForm} setShowForm={setShowForm} />
 			{showForm ? (
 				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
 			) : null}
@@ -64,15 +93,7 @@ function App() {
 				) : (
 					<FactsList facts={facts} setFacts={setFacts} categories={CATEGORIES} />
 				)}
-			</main> */}
-			{/* <SignInPage /> */}
-			<Router>
-				<AuthProvider>
-					<Route path="/home" component={SignInPage} />
-					<Route path="/signup" component={SignUpPage} />
-				</AuthProvider>
-			</Router>
-			<SignUpPage />
+			</main>
 		</>
 	);
 }
