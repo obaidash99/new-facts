@@ -9,6 +9,8 @@ import Header from './Header';
 import Loader from './Loader';
 import SignInPage from './pages/auth/SignInPage';
 import SignUpPage from './pages/auth/SignUpPage';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -64,6 +66,12 @@ function App() {
 				)}
 			</main> */}
 			{/* <SignInPage /> */}
+			<Router>
+				<AuthProvider>
+					<Route path="/home" component={SignInPage} />
+					<Route path="/signup" component={SignUpPage} />
+				</AuthProvider>
+			</Router>
 			<SignUpPage />
 		</>
 	);
