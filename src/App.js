@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CategoryFilter from './CategoryFilter';
 import FactForm from './FactForm';
 import FactsList from './FactsList';
@@ -9,7 +9,7 @@ import Loader from './Loader';
 import SignInPage from './pages/auth/SignInPage';
 import SignUpPage from './pages/auth/SignUpPage';
 
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth, db } from './firebase';
 import {
 	QueryDocumentSnapshot,
@@ -79,13 +79,41 @@ function App() {
 		};
 	}, [currentCategory]);
 
+	const handleSignOut = () => {
+		signOut(auth)
+			.then(() => {
+				return <SignInPage />;
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	return (
 		<>
-			{/* {authUser ? 'Signed In!' : 'Signed Out!'} */}
-			<Header showForm={showForm} setShowForm={setShowForm} />
-			{showForm ? (
+			<Header
+				showForm={showForm}
+				setShowForm={setShowForm}
+				authUser={authUser}
+				handleSignOut={handleSignOut}
+			/>
+			{/* {authUser && showForm ? (
 				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
-			) : null}
+			) : (
+				<SignInPage />
+			)} */}
+			{showForm ? (
+				authUser ? (
+					<FactForm
+						categories={CATEGORIES}
+						setFacts={setFacts}
+						setShowForm={setShowForm}
+					/>
+				) : null
+			) : authUser ? null : (
+				<SignInPage />
+			)}
+
 			<main className="main">
 				<CategoryFilter categories={CATEGORIES} setCurrentCategory={setCurrentCategory} />
 				{isLoading ? (

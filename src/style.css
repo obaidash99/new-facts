@@ -209,10 +209,24 @@ ul {
 	transform: scale(110%) rotate(-2deg);
 }
 
+.action-btn {
+	display: flex;
+	gap: 15px;
+}
+
 .btn-large {
 	font-size: 20px;
 	padding: 20px 32px 19px;
 	background-image: linear-gradient(135deg, #3b82f6, #ef4444, #16a34a, #eab308);
+}
+
+.btn-sign {
+	padding: 10px 15px;
+	background-color: #ef4444;
+}
+
+.btn-sign:hover {
+	background-color: #951010;
 }
 
 .btn-all-categories {

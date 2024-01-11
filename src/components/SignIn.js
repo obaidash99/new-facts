@@ -22,32 +22,35 @@ const SignIn = () => {
 	};
 
 	return (
-		<div className="signin-container">
-			<h2>Sign In</h2>
-			<form className="signin-form" onSubmit={handleSignIn}>
-				<label htmlFor="email">Email:</label>
-				<input
-					type="email"
-					id="email"
-					placeholder="Enter your email"
-					value={email}
-					onChange={handleEmail}
-					required
-				/>
+		<>
+			<h1 className="sign-in-header">You need to Sign in first!</h1>
+			<div className="signin-container">
+				<h2 style={{ textAlign: 'center' }}>Sign In</h2>
+				<form className="signin-form" onSubmit={handleSignIn}>
+					<label htmlFor="email">Email:</label>
+					<input
+						type="email"
+						id="email"
+						placeholder="Enter your email"
+						value={email}
+						onChange={handleEmail}
+						required
+					/>
 
-				<label htmlFor="password">Password:</label>
-				<input
-					type="password"
-					id="password"
-					placeholder="Enter your password"
-					value={password}
-					onChange={handlePassword}
-					required
-				/>
+					<label htmlFor="password">Password:</label>
+					<input
+						type="password"
+						id="password"
+						placeholder="Enter your password"
+						value={password}
+						onChange={handlePassword}
+						required
+					/>
 
-				<button type="submit">Sign In</button>
-			</form>
-		</div>
+					<button type="submit">Sign In</button>
+				</form>
+			</div>
+		</>
 	);
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = ({ showForm, setShowForm }) => {
+const Header = ({ showForm, setShowForm, authUser, handleSignOut }) => {
 	const appTitle = 'Today I Learned';
 
 	return (
@@ -9,12 +9,19 @@ const Header = ({ showForm, setShowForm }) => {
 				<img src="logo.png" alt="Today I Learned Logo" />
 				<h1>{appTitle}</h1>
 			</div>
-			<button
-				className="btn btn-large btn-open"
-				onClick={() => setShowForm((show) => !show)}
-			>
-				{showForm ? 'close' : 'share a fact'}
-			</button>
+			<div className="action-btn">
+				<button
+					className="btn btn-large btn-open"
+					onClick={() => setShowForm((show) => !show)}
+				>
+					{showForm ? 'close' : 'share a fact'}
+				</button>
+				{authUser ? (
+					<button className="btn btn-sign" type="submit" onClick={handleSignOut}>
+						Sign Out
+					</button>
+				) : null}
+			</div>
 		</header>
 	);
 };
