@@ -97,22 +97,10 @@ function App() {
 				authUser={authUser}
 				handleSignOut={handleSignOut}
 			/>
-			{/* {authUser && showForm ? (
+			{authUser && !showForm && (
 				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
-			) : (
-				<SignInPage />
-			)} */}
-			{showForm ? (
-				authUser ? (
-					<FactForm
-						categories={CATEGORIES}
-						setFacts={setFacts}
-						setShowForm={setShowForm}
-					/>
-				) : null
-			) : authUser ? null : (
-				<SignInPage />
 			)}
+			{!authUser && showForm && <SignInPage />}
 
 			<main className="main">
 				<CategoryFilter categories={CATEGORIES} setCurrentCategory={setCurrentCategory} />
