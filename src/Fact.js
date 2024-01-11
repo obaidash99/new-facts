@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from './firebase';
-import { collection } from 'firebase/firestore';
+import { doc, getDoc, increment, updateDoc } from 'firebase/firestore';
 
 const Fact = ({ fact, setFacts, categories }) => {
 	const [isUpdating, setIsUpdating] = useState(false);
@@ -8,12 +8,22 @@ const Fact = ({ fact, setFacts, categories }) => {
 
 	async function handleVote(columnName) {
 		setIsUpdating(true);
-		const factRef = collection(db, 'facts');
-		await factRef.update({
-			[columnName]: fact[columnName] + 1,
+		const factRef = doc(db, 'facts', fact.id);
+		// const currentFactSnapshot = await getDoc(factRef);
+		// const currentFactData = currentFactSnapshot.data();
+
+		// const updatedVote = {
+		// 	...currentFactData.vote,
+		// 	[columnName]: true,
+		// };
+
+		await updateDoc(factRef, {
+			[columnName]: increment(1),
+			// vote: updatedVote,
 		});
-		const updatedFact = async () => await factRef.get();
-		const updatedFactData = { id: updatedFact.id, ...updatedFact.data() };
+		const updatedFactSnapshot = await getDoc(factRef);
+		const updatedFactData = { id: updatedFactSnapshot.id, ...updatedFactSnapshot.data() };
+
 		setIsUpdating(false);
 		setFacts((facts) =>
 			facts.map((element) => (element.id === fact.id ? updatedFactData : element))
@@ -32,20 +42,20 @@ const Fact = ({ fact, setFacts, categories }) => {
 			<span
 				className="tag"
 				style={{
-					backgroundColor: categories.find((cat) => cat.name === fact.category).color,
+					backgroundColor: categories.find((cat) => cat.name === fact.category)?.color,
 				}}
 			>
 				{fact.category}
 			</span>
 			<div className="vote-buttons">
 				<button onClick={() => handleVote('votesInteresting')} disabled={isUpdating}>
-					👍 {fact.votesInteresting}{' '}
+					👍 {fact.votesInteresting}
 				</button>
 				<button onClick={() => handleVote('votesMindBlowing')} disabled={isUpdating}>
-					🤯 {fact.votesMindBlowing}{' '}
+					🤯 {fact.votesMindBlowing}
 				</button>
 				<button onClick={() => handleVote('votesFalse')} disabled={isUpdating}>
-					⛔️ {fact.votesFalse}{' '}
+					⛔️ {fact.votesFalse}
 				</button>
 			</div>
 		</li>
