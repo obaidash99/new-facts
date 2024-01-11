@@ -97,7 +97,7 @@ function App() {
 				authUser={authUser}
 				handleSignOut={handleSignOut}
 			/>
-			{authUser && !showForm && (
+			{authUser && showForm && (
 				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
 			)}
 			{!authUser && showForm && <SignInPage />}

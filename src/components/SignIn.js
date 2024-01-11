@@ -49,6 +49,11 @@ const SignIn = () => {
 
 					<button type="submit">Sign In</button>
 				</form>
+				<hr />
+				<div className="signup-option">
+					<p style={{ fontSize: '15px' }}>Doesn't have an account?</p>
+					<button className="sign-up-btn">Sign up</button>
+				</div>
 			</div>
 		</>
 	);
