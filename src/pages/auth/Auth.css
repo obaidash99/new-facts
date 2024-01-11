@@ -1,10 +1,10 @@
-.sign-in-header {
+.form-header {
 	text-align: center;
 	color: #eb7878;
 	margin-bottom: 10px;
 }
 
-.signin-container {
+.form-container {
 	max-width: 500px;
 	margin: 0 auto 20px;
 	padding: 20px;
@@ -16,12 +16,12 @@
 	gap: 15px;
 }
 
-.signin-form {
+.form {
 	display: flex;
 	flex-direction: column;
 }
 
-.signin-form input {
+.form input {
 	background-color: #78716c;
 	border: none;
 	border-radius: 50px;
@@ -29,18 +29,36 @@
 	font-size: 18px;
 	color: inherit;
 	font-family: inherit;
+	margin-bottom: 10px;
 }
 
-.signin-form input::placeholder {
+.form button {
+	width: fit-content;
+	margin: auto;
+	padding: 10px 15px;
+	text-transform: uppercase;
+	border: 1px solid;
+	transition: all 0.3s;
+	cursor: pointer;
+	font-size: 15px;
+}
+
+.form button:hover {
+	color: #e66161;
+}
+
+.form input::placeholder {
 	color: #a8a29e;
 }
 
-.signin-form button {
+.form button {
 	font-family: inherit;
 	border-radius: 50px;
+	color: inherit;
+	background-color: inherit;
 }
 
-.signup-option {
+.form-option {
 	display: flex;
 	gap: 5px;
 	align-items: center;
@@ -52,8 +70,10 @@
 	font-size: 13px;
 	padding: 0;
 	background: none;
+	border: none;
 	color: #eb7878;
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 .sign-up-btn:hover {

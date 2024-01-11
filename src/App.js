@@ -6,20 +6,11 @@ import FactsList from './FactsList';
 import './style.css';
 import Header from './Header';
 import Loader from './Loader';
-import SignInPage from './pages/auth/SignInPage';
-import SignUpPage from './pages/auth/SignUpPage';
+import SignInPage from './pages/auth/Auth';
 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth, db } from './firebase';
-import {
-	QueryDocumentSnapshot,
-	collection,
-	doc,
-	getDocs,
-	onSnapshot,
-	query,
-	where,
-} from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const SignIn = () => {
+const SignIn = ({ handleShowSignUp }) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -23,10 +23,10 @@ const SignIn = () => {
 
 	return (
 		<>
-			<h1 className="sign-in-header">You need to Sign in first!</h1>
-			<div className="signin-container">
+			<h1 className="form-header">You need to Sign in first!</h1>
+			<div className="form-container">
 				<h2 style={{ textAlign: 'center' }}>Sign In</h2>
-				<form className="signin-form" onSubmit={handleSignIn}>
+				<form className="form" onSubmit={handleSignIn}>
 					<label htmlFor="email">Email:</label>
 					<input
 						type="email"
@@ -50,9 +50,11 @@ const SignIn = () => {
 					<button type="submit">Sign In</button>
 				</form>
 				<hr />
-				<div className="signup-option">
+				<div className="form-option">
 					<p style={{ fontSize: '15px' }}>Doesn't have an account?</p>
-					<button className="sign-up-btn">Sign up</button>
+					<button className="sign-up-btn" onClick={handleShowSignUp}>
+						Sign up
+					</button>
 				</div>
 			</div>
 		</>
