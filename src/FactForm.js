@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { db } from './firebase';
-import { addDoc, collection } from 'firebase/firestore';
-// import supabase from './supabase';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 
 function isValidHttpUrl(string) {
 	let url;
@@ -25,7 +24,8 @@ const FactForm = ({ categories, setFacts, setShowForm }) => {
 		e.preventDefault();
 		if (text && category && isValidHttpUrl(source) && text.length <= 200) {
 			setIsUploading(true);
-			const newFact = await addDoc(collection(db, 'facts'), {
+
+			const newFactRef = await addDoc(collection(db, 'facts'), {
 				text: text,
 				category: category,
 				source: source,
@@ -35,8 +35,11 @@ const FactForm = ({ categories, setFacts, setShowForm }) => {
 				votesMindBlowing: 0,
 			});
 
+			const newFactSnapshot = await getDoc(doc(db, 'facts', newFactRef.id));
+			const newFactData = { id: newFactSnapshot.id, ...newFactSnapshot.data() };
+
 			setIsUploading(false);
-			setFacts((facts) => [newFact, ...facts]);
+			setFacts((facts) => [newFactData, ...facts]);
 
 			setText('');
 			setSource('');
