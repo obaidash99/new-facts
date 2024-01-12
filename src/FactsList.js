@@ -1,9 +1,21 @@
 import React from 'react';
 import Fact from './Fact';
 
-const FactsList = ({ facts, setFacts, categories }) => {
+const FactsList = ({ facts, setFacts, categories, currentCategory }) => {
 	if (facts.length === 0) {
-		return <p className="loader">No facts for this category YET! Add your own! 🔥</p>;
+		return (
+			<p className="loader">
+				No facts for the{' '}
+				<span
+					style={{
+						color: categories.find((cat) => cat.name === currentCategory)?.color,
+					}}
+				>
+					{currentCategory}
+				</span>{' '}
+				category YET! Add your own! 🔥
+			</p>
+		);
 	}
 	return (
 		<section>
