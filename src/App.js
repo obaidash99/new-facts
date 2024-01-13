@@ -103,6 +103,7 @@ function App() {
 						setFacts={setFacts}
 						currentCategory={currentCategory}
 						categories={CATEGORIES}
+						setShowForm={setShowForm}
 					/>
 				)}
 			</main>

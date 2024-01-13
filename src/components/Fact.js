@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 import { doc, getDoc, increment, updateDoc } from 'firebase/firestore';
 
-const Fact = ({ fact, setFacts, categories }) => {
+const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const isDisputed = fact.votesInteresting + fact.votesMindBlowing < fact.votesFalse;
 
 	async function handleVote(columnName) {
+		if (!auth.currentUser) {
+			setShowForm(true);
+			return;
+		}
+
 		setIsUpdating(true);
 		const factRef = doc(db, 'facts', fact.id);
-		// const currentFactSnapshot = await getDoc(factRef);
-		// const currentFactData = currentFactSnapshot.data();
-
-		// const updatedVote = {
-		// 	...currentFactData.vote,
-		// 	[columnName]: true,
-		// };
 
 		await updateDoc(factRef, {
 			[columnName]: increment(1),
-			// vote: updatedVote,
 		});
 		const updatedFactSnapshot = await getDoc(factRef);
 		const updatedFactData = { id: updatedFactSnapshot.id, ...updatedFactSnapshot.data() };

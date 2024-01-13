@@ -17,8 +17,18 @@ const Header = ({ showForm, setShowForm, authUser, handleSignOut }) => {
 					{showForm ? 'close' : 'share a fact'}
 				</button>
 				{authUser ? (
-					<button className="btn btn-sign" type="submit" onClick={handleSignOut}>
+					<button className="btn btn-sign-out" type="submit" onClick={handleSignOut}>
 						Sign Out
+					</button>
+				) : !showForm ? (
+					<button
+						className="btn btn-sign-in"
+						type="submit"
+						onClick={() => {
+							setShowForm(true);
+						}}
+					>
+						Sign in
 					</button>
 				) : null}
 			</div>
