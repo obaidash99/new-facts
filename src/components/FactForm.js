@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db } from './firebase';
+import { db } from '../firebase';
 import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 
 function isValidHttpUrl(string) {

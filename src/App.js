@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import CategoryFilter from './CategoryFilter';
-import FactForm from './FactForm';
-import FactsList from './FactsList';
+import CategoryFilter from './components/CategoryFilter';
+import FactForm from './components/FactForm';
+import FactsList from './components/FactsList';
 
 import './style.css';
-import Header from './Header';
-import Loader from './Loader';
+import Header from './components/Header';
+import Loader from './components/Loader';
 import SignInPage from './pages/auth/Auth';
 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
