@@ -1,10 +1,19 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+
+function isValidEmail(email) {
+	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return regex.test(email);
+}
 
 const SignUp = ({ handleShowSignUp }) => {
 	const [email, setEmail] = useState('');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 	const [password, setPassword] = useState('');
+	// const [image, setImage] = useState('');
 
 	const handleEmail = (e) => {
 		setEmail(e.target.value);
@@ -14,13 +23,27 @@ const SignUp = ({ handleShowSignUp }) => {
 		setPassword(e.target.value);
 	};
 
-	const handleSignUp = (e) => {
+	const handleSignUp = async (e) => {
 		e.preventDefault();
-		createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				console.log(userCredential);
-			})
-			.catch((error) => console.log(error));
+		if (email && firstName && lastName && isValidEmail(email) && password) {
+			try {
+				const userCredential = await createUserWithEmailAndPassword(
+					auth,
+					email,
+					password
+				);
+				const user = userCredential.user;
+
+				await addDoc(collection(db, 'users', user.id), {
+					firstName: firstName,
+					lastName: lastName,
+					email: email,
+					password: password,
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	};
 
 	return (
@@ -29,6 +52,24 @@ const SignUp = ({ handleShowSignUp }) => {
 			<div className="form-container">
 				<h2 style={{ textAlign: 'center' }}>Sign Up</h2>
 				<form className="form" onSubmit={handleSignUp}>
+					<label htmlFor="firstName">First Name:</label>
+					<input
+						type="firstName"
+						id="firstName"
+						placeholder="Enter your first name"
+						value={firstName}
+						onChange={(e) => setFirstName(e.target.value)}
+						required
+					/>
+					<label htmlFor="lastName">Last Name:</label>
+					<input
+						type="lastName"
+						id="lastName"
+						placeholder="Enter your last name"
+						value={lastName}
+						onChange={(e) => setLastName(e.target.value)}
+						required
+					/>
 					<label htmlFor="email">Email:</label>
 					<input
 						type="email"
@@ -48,6 +89,8 @@ const SignUp = ({ handleShowSignUp }) => {
 						onChange={handlePassword}
 						required
 					/>
+					{/* <label htmlFor="file">Image:</label>
+					<input type="file" id="file" value={image} required /> */}
 					<button type="submit">Sign Up</button>
 				</form>
 				<hr />
