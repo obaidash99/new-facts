@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
-import { auth, db } from '../firebase';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { auth } from '../firebase';
 
 function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -15,34 +14,10 @@ const SignUp = ({ handleShowSignUp }) => {
 	const [password, setPassword] = useState('');
 	// const [image, setImage] = useState('');
 
-	const handleEmail = (e) => {
-		setEmail(e.target.value);
-	};
-
-	const handlePassword = (e) => {
-		setPassword(e.target.value);
-	};
-
 	const handleSignUp = async (e) => {
 		e.preventDefault();
 		if (email && firstName && lastName && isValidEmail(email) && password) {
-			try {
-				const userCredential = await createUserWithEmailAndPassword(
-					auth,
-					email,
-					password
-				);
-				const user = userCredential.user;
-
-				await addDoc(collection(db, 'users', user.id), {
-					firstName: firstName,
-					lastName: lastName,
-					email: email,
-					password: password,
-				});
-			} catch (error) {
-				console.log(error);
-			}
+			await createUserWithEmailAndPassword(auth, email, password);
 		}
 	};
 
@@ -76,7 +51,7 @@ const SignUp = ({ handleShowSignUp }) => {
 						id="email"
 						placeholder="Enter your email"
 						value={email}
-						onChange={handleEmail}
+						onChange={(e) => setEmail(e.target.value)}
 						required
 					/>
 
@@ -86,7 +61,7 @@ const SignUp = ({ handleShowSignUp }) => {
 						id="password"
 						placeholder="Enter your password"
 						value={password}
-						onChange={handlePassword}
+						onChange={(e) => setPassword(e.target.value)}
 						required
 					/>
 					{/* <label htmlFor="file">Image:</label>
