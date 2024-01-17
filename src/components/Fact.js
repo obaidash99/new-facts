@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth, db } from '../firebase';
-import { doc, getDoc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 
 const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 	const [isUpdating, setIsUpdating] = useState(false);

@@ -10,12 +10,27 @@ function isValidEmail(email) {
 const SignUp = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [passwordConf, setPasswordConf] = useState('');
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 	const { currentUser, signup } = useAuth();
 
-	const handleSignUp = async (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (password !== passwordConf) {
+			return setError("Passwords Don't match");
+		}
+
 		if (email && isValidEmail(email) && password) {
-			await signup(email, password);
+			try {
+				setError('');
+				setLoading(true);
+				await signup(email, password);
+			} catch {
+				setLoading(false);
+				setError('Faild to Sign in!');
+			}
 		}
 	};
 
@@ -26,7 +41,8 @@ const SignUp = () => {
 					<h1 className="form-header">Create an Account</h1>
 					<div className="form-container">
 						<h2 style={{ textAlign: 'center' }}>Sign Up</h2>
-						<form className="form" onSubmit={handleSignUp}>
+						{error && <p className="error-message">{error}</p>}
+						<form className="form" onSubmit={handleSubmit}>
 							<label htmlFor="email">Email:</label>
 							<input
 								type="email"
@@ -46,7 +62,19 @@ const SignUp = () => {
 								onChange={(e) => setPassword(e.target.value)}
 								required
 							/>
-							<button type="submit">Sign Up</button>
+
+							<label htmlFor="passwordConf">Confirm Password:</label>
+							<input
+								type="password"
+								id="passwordConf"
+								placeholder="Enter your password"
+								value={passwordConf}
+								onChange={(e) => setPasswordConf(e.target.value)}
+								required
+							/>
+							<button type="submit" disabled={loading}>
+								Sign Up
+							</button>
 						</form>
 						<hr />
 						<div className="form-option">

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 
 const Header = () => {
@@ -21,15 +20,11 @@ const Header = () => {
 				>
 					{showForm ? 'close' : 'share a fact'}
 				</button>
-				{currentUser ? (
+				{currentUser && (
 					<button className="btn btn-sign-out" type="submit" onClick={logout}>
 						Sign Out
 					</button>
-				) : !showForm ? (
-					<Link to="/signin" className="btn btn-sign-in" type="submit">
-						Sign in
-					</Link>
-				) : null}
+				)}
 			</div>
 		</header>
 	);

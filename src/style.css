@@ -72,10 +72,6 @@ body {
 }
 
 @media (max-width: 1000px) {
-	body {
-		/* padding: 20px; */
-	}
-
 	.fact-form {
 		flex-direction: column;
 		align-items: stretch;
@@ -388,4 +384,22 @@ ul {
 .sign-up-btn:hover {
 	background: none;
 	color: #e66161;
+}
+
+.error-message {
+	color: #d9534f; /* Bootstrap's danger color */
+	background-color: #f2dede; /* Bootstrap's danger background color */
+	border: 1px solid #ebccd1; /* Bootstrap's danger border color */
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 50px;
+}
+
+.success-message {
+	color: #125712; /* Bootstrap's success color */
+	background-color: #dff0d8; /* Bootstrap's success background color */
+	border: 1px solid #d6e9c6; /* Bootstrap's success border color */
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 50px;
 }

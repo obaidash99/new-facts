@@ -6,6 +6,7 @@ import SignIn from './components/SignIn';
 import Main from './components/Main';
 import PrivateRoutes from './components/PrivateRoutes';
 import DataProvider from './context/DataContext';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 						</Route>
 						<Route path="/signup" Component={SignUp} />
 						<Route path="/signin" Component={SignIn} />
+						<Route path="/forgot-password" Component={ForgotPassword} />
 					</Routes>
 				</DataProvider>
 			</AuthProvider>

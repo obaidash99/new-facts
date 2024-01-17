@@ -5,11 +5,21 @@ import { Link, Navigate } from 'react-router-dom';
 const SignIn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 	const { currentUser, signin } = useAuth();
 
-	const handleSignIn = async (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await signin(email, password);
+
+		try {
+			setError('');
+			setLoading(true);
+			await signin(email, password);
+		} catch {
+			setLoading(false);
+			setError('Faild to Sign in!');
+		}
 	};
 
 	return (
@@ -19,7 +29,8 @@ const SignIn = () => {
 					<h1 className="form-header">Sign in to your Account</h1>
 					<div className="form-container">
 						<h2 style={{ textAlign: 'center' }}>Sign In</h2>
-						<form className="form" onSubmit={handleSignIn}>
+						{error && <p className="error-message">{error}</p>}
+						<form className="form" onSubmit={handleSubmit}>
 							<label htmlFor="email">Email:</label>
 							<input
 								type="email"
@@ -39,8 +50,14 @@ const SignIn = () => {
 								onChange={(e) => setPassword(e.target.value)}
 								required
 							/>
-
-							<button type="submit">Sign In</button>
+							<div style={{ textAlign: 'center', marginBottom: '15px' }}>
+								<Link className="sign-up-btn" to="/forgot-password">
+									Forgot Passowrd?
+								</Link>
+							</div>
+							<button type="submit" disabled={loading}>
+								Sign In
+							</button>
 						</form>
 						<hr />
 						<div className="form-option">
