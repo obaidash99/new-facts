@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useAuth } from '../AuthContext';
-import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Link, Navigate } from 'react-router-dom';
+import '../Auth.css';
 
 function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	return regex.test(email);
 }
 
-const SignUp = ({ handleShowSignUp }) => {
+const SignUp = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const { currentUser, signup } = useAuth();
@@ -51,9 +52,9 @@ const SignUp = ({ handleShowSignUp }) => {
 						<hr />
 						<div className="form-option">
 							<p style={{ fontSize: '15px' }}>Return to sign in?</p>
-							<button className="sign-up-btn" onClick={handleShowSignUp}>
+							<Link className="sign-up-btn" to="/signin">
 								Sign in
-							</button>
+							</Link>
 						</div>
 					</div>
 				</div>

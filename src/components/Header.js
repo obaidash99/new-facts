@@ -1,5 +1,6 @@
 import React from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Header = ({ showForm, setShowForm }) => {
 	const appTitle = 'Today I Learned';
@@ -23,15 +24,9 @@ const Header = ({ showForm, setShowForm }) => {
 						Sign Out
 					</button>
 				) : !showForm ? (
-					<button
-						className="btn btn-sign-in"
-						type="submit"
-						onClick={() => {
-							setShowForm(true);
-						}}
-					>
+					<Link to="/signin" className="btn btn-sign-in" type="submit">
 						Sign in
-					</button>
+					</Link>
 				) : null}
 			</div>
 		</header>

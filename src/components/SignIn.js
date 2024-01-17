@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { auth } from '../firebase';
-import { useAuth } from '../AuthContext';
-import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Link, Navigate } from 'react-router-dom';
+import '../Auth.css';
 
 const SignIn = ({ handleShowSignUp }) => {
 	const [email, setEmail] = useState('');
@@ -46,9 +46,9 @@ const SignIn = ({ handleShowSignUp }) => {
 						<hr />
 						<div className="form-option">
 							<p style={{ fontSize: '15px' }}>Doesn't have an account?</p>
-							<button className="sign-up-btn" onClick={handleShowSignUp}>
+							<Link className="sign-up-btn" to="/signup">
 								Sign up
-							</button>
+							</Link>
 						</div>
 					</div>
 				</div>

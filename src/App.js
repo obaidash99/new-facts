@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
-import CategoryFilter from './components/CategoryFilter';
-import FactForm from './components/FactForm';
-import FactsList from './components/FactsList';
-
 import './style.css';
-import Header from './components/Header';
-import Loader from './components/Loader';
-import SignInPage from './pages/auth/Auth';
 
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from './firebase';
+import { db } from './firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import AuthProvider from './AuthContext';
+import AuthProvider from './context/AuthContext';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
+import Main from './components/Main';
+import PrivateRoutes from './components/PrivateRoutes';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -29,17 +26,8 @@ function App() {
 	const [facts, setFacts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [currentCategory, setCurrentCategory] = useState('all');
-	const [authUser, setAuthUser] = useState(null);
 
 	useEffect(() => {
-		const listen = onAuthStateChanged(auth, (user) => {
-			if (user) {
-				setAuthUser(user);
-			} else {
-				setAuthUser(null);
-			}
-		});
-
 		const getFacts = async () => {
 			setIsLoading(true);
 
@@ -65,35 +53,34 @@ function App() {
 			setFacts(facts);
 		};
 		getFacts();
-
-		return () => {
-			listen();
-		};
 	}, [currentCategory]);
 
 	return (
-		<AuthProvider>
-			<Header showForm={showForm} setShowForm={setShowForm} />
-			{authUser && showForm && (
-				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
-			)}
-			{!authUser && showForm && <SignInPage />}
-
-			<main className="main">
-				<CategoryFilter categories={CATEGORIES} setCurrentCategory={setCurrentCategory} />
-				{isLoading ? (
-					<Loader />
-				) : (
-					<FactsList
-						facts={facts}
-						setFacts={setFacts}
-						currentCategory={currentCategory}
-						categories={CATEGORIES}
-						setShowForm={setShowForm}
-					/>
-				)}
-			</main>
-		</AuthProvider>
+		<Router>
+			<AuthProvider>
+				<Routes>
+					<Route element={<PrivateRoutes />}>
+						<Route
+							path="/"
+							exact
+							element={
+								<Main
+									categories={CATEGORIES}
+									setCurrentCategory={setCurrentCategory}
+									facts={facts}
+									setFacts={setFacts}
+									currentCategory={currentCategory}
+									setShowForm={setShowForm}
+									showForm={showForm}
+								/>
+							}
+						/>
+					</Route>
+					<Route path="/signup" Component={SignUp} />
+					<Route path="/signin" Component={SignIn} />
+				</Routes>
+			</AuthProvider>
+		</Router>
 	);
 }
 
