@@ -8,9 +8,10 @@ import Header from './components/Header';
 import Loader from './components/Loader';
 import SignInPage from './pages/auth/Auth';
 
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import AuthProvider from './AuthContext';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -70,24 +71,9 @@ function App() {
 		};
 	}, [currentCategory]);
 
-	const handleSignOut = () => {
-		signOut(auth)
-			.then(() => {
-				return <SignInPage />;
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
 	return (
-		<>
-			<Header
-				showForm={showForm}
-				setShowForm={setShowForm}
-				authUser={authUser}
-				handleSignOut={handleSignOut}
-			/>
+		<AuthProvider>
+			<Header showForm={showForm} setShowForm={setShowForm} />
 			{authUser && showForm && (
 				<FactForm categories={CATEGORIES} setFacts={setFacts} setShowForm={setShowForm} />
 			)}
@@ -107,7 +93,7 @@ function App() {
 					/>
 				)}
 			</main>
-		</>
+		</AuthProvider>
 	);
 }
 

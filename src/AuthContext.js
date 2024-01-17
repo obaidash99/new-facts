@@ -52,7 +52,15 @@ export default function AuthProvider({ children }) {
 		return unsubscribe;
 	}, []);
 
-	const value = { currentUser, signin, signup, resetPassword, logout };
+	const value = {
+		currentUser,
+		signin,
+		signup,
+		resetPassword,
+		logout,
+		editEmail,
+		editPassword,
+	};
 
 	return (
 		<AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAuth } from '../AuthContext';
 
-const Header = ({ showForm, setShowForm, authUser, handleSignOut }) => {
+const Header = ({ showForm, setShowForm }) => {
 	const appTitle = 'Today I Learned';
+	const { currentUser, logout } = useAuth();
 
 	return (
 		<header className="header">
@@ -16,8 +18,8 @@ const Header = ({ showForm, setShowForm, authUser, handleSignOut }) => {
 				>
 					{showForm ? 'close' : 'share a fact'}
 				</button>
-				{authUser ? (
-					<button className="btn btn-sign-out" type="submit" onClick={handleSignOut}>
+				{currentUser ? (
+					<button className="btn btn-sign-out" type="submit" onClick={logout}>
 						Sign Out
 					</button>
 				) : !showForm ? (
