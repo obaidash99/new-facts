@@ -9,6 +9,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Main from './components/Main';
 import PrivateRoutes from './components/PrivateRoutes';
+import DataProvider from './context/DataContext';
 
 const CATEGORIES = [
 	{ name: 'technology', color: '#3b82f6' },
@@ -58,27 +59,29 @@ function App() {
 	return (
 		<Router>
 			<AuthProvider>
-				<Routes>
-					<Route element={<PrivateRoutes />}>
-						<Route
-							path="/"
-							exact
-							element={
-								<Main
-									categories={CATEGORIES}
-									setCurrentCategory={setCurrentCategory}
-									facts={facts}
-									setFacts={setFacts}
-									currentCategory={currentCategory}
-									setShowForm={setShowForm}
-									showForm={showForm}
-								/>
-							}
-						/>
-					</Route>
-					<Route path="/signup" Component={SignUp} />
-					<Route path="/signin" Component={SignIn} />
-				</Routes>
+				<DataProvider>
+					<Routes>
+						<Route element={<PrivateRoutes />}>
+							<Route
+								path="/"
+								exact
+								element={
+									<Main
+										categories={CATEGORIES}
+										setCurrentCategory={setCurrentCategory}
+										facts={facts}
+										setFacts={setFacts}
+										currentCategory={currentCategory}
+										setShowForm={setShowForm}
+										showForm={showForm}
+									/>
+								}
+							/>
+						</Route>
+						<Route path="/signup" Component={SignUp} />
+						<Route path="/signin" Component={SignIn} />
+					</Routes>
+				</DataProvider>
 			</AuthProvider>
 		</Router>
 	);

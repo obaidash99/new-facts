@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../firebase';
 import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { useData } from '../context/DataContext';
 
 function isValidHttpUrl(string) {
 	let url;
@@ -14,11 +15,12 @@ function isValidHttpUrl(string) {
 	return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
-const FactForm = ({ categories, setFacts, setShowForm }) => {
+const FactForm = () => {
 	const [text, setText] = useState('');
 	const [source, setSource] = useState('');
 	const [category, setCategoty] = useState('');
 	const [isUploading, setIsUploading] = useState(false);
+	const { categories, setFacts, setShowForm } = useData();
 
 	async function handleSubmit(e) {
 		e.preventDefault();

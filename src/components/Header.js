@@ -1,10 +1,12 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useData } from '../context/DataContext';
 
-const Header = ({ showForm, setShowForm }) => {
+const Header = () => {
 	const appTitle = 'Today I Learned';
 	const { currentUser, logout } = useAuth();
+	const { showForm, setShowForm } = useData();
 
 	return (
 		<header className="header">

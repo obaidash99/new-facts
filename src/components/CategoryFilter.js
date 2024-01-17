@@ -1,4 +1,8 @@
-const CategoryFilter = ({ categories, setCurrentCategory }) => {
+import { useData } from '../context/DataContext';
+
+const CategoryFilter = () => {
+	const { categories, setCurrentCategory } = useData();
+
 	return (
 		<aside>
 			<ul>

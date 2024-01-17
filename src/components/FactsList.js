@@ -1,7 +1,10 @@
 import React from 'react';
 import Fact from './Fact';
+import { useData } from '../context/DataContext';
 
-const FactsList = ({ facts, setFacts, categories, currentCategory, setShowForm }) => {
+const FactsList = () => {
+	const { facts, setFacts, categories, currentCategory, setShowForm } = useData();
+
 	if (facts.length === 0) {
 		return (
 			<p className="loader">
