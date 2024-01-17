@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, Navigate } from 'react-router-dom';
-import '../Auth.css';
 
-const SignIn = ({ handleShowSignUp }) => {
+const SignIn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const { currentUser, signin } = useAuth();
@@ -17,7 +16,7 @@ const SignIn = ({ handleShowSignUp }) => {
 		<>
 			{!currentUser ? (
 				<div>
-					<h1 className="form-header">You need to Sign in first!</h1>
+					<h1 className="form-header">Sign in to your Account</h1>
 					<div className="form-container">
 						<h2 style={{ textAlign: 'center' }}>Sign In</h2>
 						<form className="form" onSubmit={handleSignIn}>

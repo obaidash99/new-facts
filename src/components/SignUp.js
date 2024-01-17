@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, Navigate } from 'react-router-dom';
-import '../Auth.css';
 
 function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -24,7 +23,7 @@ const SignUp = () => {
 		<>
 			{!currentUser ? (
 				<div>
-					<h1 className="form-header">Create an Account!</h1>
+					<h1 className="form-header">Create an Account</h1>
 					<div className="form-container">
 						<h2 style={{ textAlign: 'center' }}>Sign Up</h2>
 						<form className="form" onSubmit={handleSignUp}>
