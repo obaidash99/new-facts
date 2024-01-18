@@ -37,7 +37,7 @@ const SignUp = () => {
 	return (
 		<>
 			{!currentUser ? (
-				<div>
+				<div className="form-parent">
 					<h1 className="form-header">Create an Account</h1>
 					<div className="form-container">
 						<h2 style={{ textAlign: 'center' }}>Sign Up</h2>
