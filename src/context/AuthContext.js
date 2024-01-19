@@ -5,9 +5,10 @@ import {
 	signOut,
 	updateEmail,
 	updatePassword,
+	signInWithPopup,
 } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth, provider } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -43,6 +44,10 @@ export default function AuthProvider({ children }) {
 		return updatePassword(auth.currentUser, password);
 	}
 
+	function googleSignIn() {
+		return signInWithPopup(auth, provider);
+	}
+
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
 			setCurrentUser(user);
@@ -60,6 +65,7 @@ export default function AuthProvider({ children }) {
 		logout,
 		editEmail,
 		editPassword,
+		googleSignIn,
 	};
 
 	return (

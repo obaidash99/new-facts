@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, Navigate } from 'react-router-dom';
+import GoogleButton from 'react-google-button';
 
 const SignIn = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { currentUser, signin } = useAuth();
+	const { currentUser, signin, googleSignIn } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -58,6 +59,7 @@ const SignIn = () => {
 							<button type="submit" disabled={loading}>
 								Sign In
 							</button>
+							<GoogleButton style={{ margin: '5px auto' }} onClick={googleSignIn} />
 						</form>
 						<hr />
 						<div className="form-option">

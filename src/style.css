@@ -345,6 +345,7 @@ ul {
 .form button {
 	width: fit-content;
 	margin: auto;
+	margin-bottom: 5px;
 	padding: 10px 15px;
 	text-transform: uppercase;
 	border: 1px solid;
@@ -355,6 +356,7 @@ ul {
 
 .form button:hover {
 	color: #e66161;
+	box-shadow: 0 0 5px rgba(230, 97, 97, 0.5);
 }
 
 .form input::placeholder {
