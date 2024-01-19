@@ -3,14 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 
 const Header = () => {
-	const appTitle = 'Today I Learned';
+	const appTitle = 'New Fact';
 	const { currentUser, logout } = useAuth();
 	const { showForm, setShowForm } = useData();
 
 	return (
 		<header className="header">
 			<div className="logo">
-				<img src="logo.png" alt="Today I Learned Logo" />
+				<img src="logo.png" alt="New Fact Logo" />
 				<h1>{appTitle}</h1>
 			</div>
 			<div className="action-btn">
