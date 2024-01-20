@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 
@@ -19,48 +19,46 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 		}
 
 		setIsUpdating(true);
-		const factRef = doc(db, 'facts', fact.id);
 
 		if (selectedOption) {
 			if (selectedOption === columnName) {
-				setVotes((prevVotes) => ({
-					...prevVotes,
-					[columnName]: prevVotes[columnName] - 1,
-				}));
-				setSelectedOption(null);
-
-				await updateDoc(factRef, {
-					[columnName]: increment(-1),
-				});
-
-				const unsubscribe = onSnapshot(factRef, (updatedFactSnapshot) => {
-					const updatedFactData = {
-						id: updatedFactSnapshot.id,
-						...updatedFactSnapshot.data(),
-					};
-
-					setIsUpdating(false);
-					setFacts((facts) =>
-						facts.map((element) => (element.id === fact.id ? updatedFactData : element))
-					);
-
-					unsubscribe();
-				});
-
-				return;
+				unselectOption(columnName);
+			} else {
+				// User is changing the vote, unselect the old vote
+				const oldColumnName = selectedOption;
+				await unselectOption(oldColumnName);
+				// Select the new vote
+				await selectOption(columnName);
 			}
-			setIsUpdating(false);
-			return;
+		} else {
+			// User is selecting a new vote
+			await selectOption(columnName);
 		}
+	}
 
-		setVotes((prevVotes) => ({
-			...prevVotes,
-			[columnName]: prevVotes[columnName] + 1,
-		}));
+	const unselectOption = async (columnName) => {
+		setVotes((prevVotes) => ({ ...prevVotes, [columnName]: prevVotes[columnName] - 1 }));
+		setSelectedOption(null);
+
+		await updateVotes(columnName, -1);
+		// Remove the user's previous vote from localStorage
+		localStorage.removeItem(`vote_${fact.id}`);
+	};
+
+	const selectOption = async (columnName) => {
+		setVotes((prevVotes) => ({ ...prevVotes, [columnName]: prevVotes[columnName] + 1 }));
 		setSelectedOption(columnName);
 
+		// Mark that the user has voted for this fact
+		localStorage.setItem(`vote_${fact.id}`, columnName);
+
+		await updateVotes(columnName, 1);
+	};
+
+	const updateVotes = async (columnName, incrementValue) => {
+		const factRef = doc(db, 'facts', fact.id);
 		await updateDoc(factRef, {
-			[columnName]: increment(1),
+			[columnName]: increment(incrementValue),
 		});
 
 		const unsubscribe = onSnapshot(factRef, (updatedFactSnapshot) => {
@@ -76,7 +74,16 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 
 			unsubscribe();
 		});
-	}
+	};
+
+	// useEffect to load user's vote on component mount
+	useEffect(() => {
+		const userVote = localStorage.getItem(`vote_${fact.id}`);
+		if (userVote) {
+			// User has voted, disable other options
+			setSelectedOption(userVote);
+		}
+	}, [fact.id]);
 
 	return (
 		<li className="fact">

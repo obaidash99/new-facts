@@ -59,6 +59,10 @@ const SignIn = () => {
 							<button type="submit" disabled={loading}>
 								Sign In
 							</button>
+							<div style={{ textAlign: 'center', margin: '5px auto' }}>
+								{' '}
+								ـــــــــــــــــــــــــ or ـــــــــــــــــــــــــ
+							</div>
 							<GoogleButton style={{ margin: '5px auto' }} onClick={googleSignIn} />
 						</form>
 						<hr />
