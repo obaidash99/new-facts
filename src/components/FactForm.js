@@ -31,10 +31,7 @@ const FactForm = () => {
 				text: text,
 				category: category,
 				source: source,
-				vote: { false: false, interesting: false, mindBlowing: false },
-				votesFalse: 0,
-				votesInteresting: 0,
-				votesMindBlowing: 0,
+				votes: { false: 0, interesting: 0, mindBlowing: 0 },
 			});
 
 			const newFactSnapshot = await getDoc(doc(db, 'facts', newFactRef.id));

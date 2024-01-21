@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 
 const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [selectedOption, setSelectedOption] = useState(null);
-	const [votes, setVotes] = useState({
-		votesInteresting: fact.votesInteresting,
-		votesMindBlowing: fact.votesMindBlowing,
-		votesFalse: fact.votesFalse,
-	});
 	const isDisputed = fact.votesInteresting + fact.votesMindBlowing < fact.votesFalse;
+	const { currentUser, setUsers } = useAuth();
 
 	async function handleVote(columnName) {
 		if (!auth.currentUser) {
 			setShowForm(true);
 			return;
 		}
-
-		const factRef = doc(db, 'facts', fact.id);
 
 		if (selectedOption) {
 			if (selectedOption === columnName) {
@@ -35,15 +30,16 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 
 	const unselectOption = async (columnName) => {
 		setSelectedOption(null);
-		await updateVotes(columnName, -1);
+		await updateFactVotes(columnName, -1);
 	};
 
 	const selectOption = async (columnName) => {
 		setSelectedOption(columnName);
-		await updateVotes(columnName, 1);
+		await updateFactVotes(columnName, 1);
+		await updateUserVotes(columnName);
 	};
 
-	const updateVotes = async (columnName, incrementValue) => {
+	const updateFactVotes = async (columnName, incrementValue) => {
 		const factRef = doc(db, 'facts', fact.id);
 		await updateDoc(factRef, {
 			[`votes.${columnName}`]: increment(incrementValue),
@@ -57,6 +53,33 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 
 			setFacts((facts) =>
 				facts.map((element) => (element.id === fact.id ? updatedFactData : element))
+			);
+
+			unsubscribe();
+		});
+	};
+
+	const updateUserVotes = async (columnName) => {
+		const userRef = doc(db, 'users', currentUser.uid);
+
+		await updateDoc(
+			userRef,
+			{
+				votes: { ...currentUser.votes, [fact.id]: columnName },
+			},
+			{ merge: true }
+		);
+
+		const unsubscribe = onSnapshot(userRef, (updatedUserSnapshot) => {
+			const updatedUserData = {
+				id: updatedUserSnapshot.id,
+				...updatedUserSnapshot.data(),
+			};
+
+			setUsers((users) =>
+				users.map((element) =>
+					element.id === currentUser.uid ? updatedUserData : element
+				)
 			);
 
 			unsubscribe();

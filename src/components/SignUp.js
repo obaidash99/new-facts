@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, Navigate } from 'react-router-dom';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -26,7 +28,14 @@ const SignUp = () => {
 			try {
 				setError('');
 				setLoading(true);
-				await signup(email, password);
+
+				const userCredential = await signup(email, password);
+				const user = userCredential.user;
+				await addDoc(collection(db, 'users'), {
+					id: user.uid,
+					email: user.email,
+					votes: {},
+				});
 			} catch {
 				setLoading(false);
 				setError('Faild to Sign in!');

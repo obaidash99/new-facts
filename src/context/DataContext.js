@@ -12,6 +12,7 @@ export function useData() {
 export default function DataProvider({ children }) {
 	const [showForm, setShowForm] = useState(false);
 	const [facts, setFacts] = useState([]);
+	const [users, setUsers] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [currentCategory, setCurrentCategory] = useState('all');
 	const CATEGORIES = [
@@ -29,16 +30,18 @@ export default function DataProvider({ children }) {
 		const getFacts = async () => {
 			setIsLoading(true);
 
-			const ref = collection(db, 'facts');
-			const snapshot = await getDocs(ref);
+			const factsRef = collection(db, 'facts');
+			const factsSnapshot = await getDocs(factsRef);
+			const usersRef = collection(db, 'users');
+			const usersSnapshot = await getDocs(usersRef);
 
-			let facts = snapshot.docs.map((doc) => ({
+			let facts = factsSnapshot.docs.map((doc) => ({
 				...doc.data(),
 				id: doc.id,
 			}));
 
 			if (currentCategory !== 'all') {
-				const q = query(ref, where('category', '==', currentCategory));
+				const q = query(factsRef, where('category', '==', currentCategory));
 				const catSnapshot = await getDocs(q);
 
 				facts = catSnapshot.docs.map((doc) => ({
@@ -47,8 +50,11 @@ export default function DataProvider({ children }) {
 				}));
 			}
 
+			let users = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
 			setIsLoading(false);
 			setFacts(facts);
+			setUsers(users);
 		};
 		getFacts();
 	}, [currentCategory]);
@@ -63,6 +69,8 @@ export default function DataProvider({ children }) {
 		currentCategory,
 		setCurrentCategory,
 		categories: CATEGORIES,
+		users,
+		setUsers,
 	};
 
 	return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
