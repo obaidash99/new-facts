@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, Navigate } from 'react-router-dom';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
+import GoogleButton from 'react-google-button';
 
 function isValidEmail(email) {
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -15,7 +16,7 @@ const SignUp = () => {
 	const [passwordConf, setPasswordConf] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { currentUser, signup } = useAuth();
+	const { currentUser, signup, googleSignIn } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -84,6 +85,10 @@ const SignUp = () => {
 							<button type="submit" disabled={loading}>
 								Sign Up
 							</button>
+							<div style={{ textAlign: 'center', margin: '5px auto' }}>
+								ـــــــــــــــــــــــــ or ـــــــــــــــــــــــــ
+							</div>
+							<GoogleButton style={{ margin: '5px auto' }} onClick={googleSignIn} />
 						</form>
 						<hr />
 						<div className="form-option">

@@ -30,16 +30,19 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 
 	const unselectOption = async (columnName) => {
 		setSelectedOption(null);
-		await updateFactVotes(columnName, -1);
+		await updateVotes(columnName, -1);
+		// Remove the user's previous vote from localStorage
+		localStorage.removeItem(`vote_${fact.id}`);
 	};
 
 	const selectOption = async (columnName) => {
 		setSelectedOption(columnName);
-		await updateFactVotes(columnName, 1);
-		await updateUserVotes(columnName);
+		// Mark that the user has voted for this fact
+		localStorage.setItem(`vote_${fact.id}`, columnName);
+		await updateVotes(columnName, 1);
 	};
 
-	const updateFactVotes = async (columnName, incrementValue) => {
+	const updateVotes = async (columnName, incrementValue) => {
 		const factRef = doc(db, 'facts', fact.id);
 		await updateDoc(factRef, {
 			[`votes.${columnName}`]: increment(incrementValue),
@@ -53,33 +56,6 @@ const Fact = ({ fact, setFacts, categories, setShowForm }) => {
 
 			setFacts((facts) =>
 				facts.map((element) => (element.id === fact.id ? updatedFactData : element))
-			);
-
-			unsubscribe();
-		});
-	};
-
-	const updateUserVotes = async (columnName) => {
-		const userRef = doc(db, 'users', currentUser.uid);
-
-		await updateDoc(
-			userRef,
-			{
-				votes: { ...currentUser.votes, [fact.id]: columnName },
-			},
-			{ merge: true }
-		);
-
-		const unsubscribe = onSnapshot(userRef, (updatedUserSnapshot) => {
-			const updatedUserData = {
-				id: updatedUserSnapshot.id,
-				...updatedUserSnapshot.data(),
-			};
-
-			setUsers((users) =>
-				users.map((element) =>
-					element.id === currentUser.uid ? updatedUserData : element
-				)
 			);
 
 			unsubscribe();

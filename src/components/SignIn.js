@@ -60,7 +60,6 @@ const SignIn = () => {
 								Sign In
 							</button>
 							<div style={{ textAlign: 'center', margin: '5px auto' }}>
-								{' '}
 								ـــــــــــــــــــــــــ or ـــــــــــــــــــــــــ
 							</div>
 							<GoogleButton style={{ margin: '5px auto' }} onClick={googleSignIn} />
