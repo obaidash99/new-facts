@@ -15,7 +15,7 @@ function App() {
 				<DataProvider>
 					<Routes>
 						<Route element={<PrivateRoutes />}>
-							<Route path="/" exact element={<Main />} />
+							<Route path="/" element={<Main />} />
 						</Route>
 						<Route path="/signup" Component={SignUp} />
 						<Route path="/signin" Component={SignIn} />
