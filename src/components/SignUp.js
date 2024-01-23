@@ -22,7 +22,7 @@ const SignUp = () => {
 		e.preventDefault();
 
 		if (password !== passwordConf) {
-			return setError("Passwords Don't match");
+			return setError("Passwords don't match");
 		}
 
 		if (email && isValidEmail(email) && password) {
@@ -32,14 +32,29 @@ const SignUp = () => {
 
 				const userCredential = await signup(email, password);
 				const user = userCredential.user;
+
 				await addDoc(collection(db, 'users'), {
 					id: user.uid,
 					email: user.email,
 					votes: {},
 				});
-			} catch {
+
 				setLoading(false);
-				setError('Faild to Sign in!');
+			} catch (error) {
+				setLoading(false);
+				switch (error.code) {
+					case 'auth/weak-password':
+						setError('Password is too weak. Choose a stronger password.');
+						break;
+					case 'auth/email-already-in-use':
+						setError('Email is already in use. Please use a different email.');
+						break;
+					case 'auth/invalid-email':
+						setError('Invalid email address. Please enter a valid email.');
+						break;
+					default:
+						setError('Failed to sign up. Please try again later.');
+				}
 			}
 		}
 	};

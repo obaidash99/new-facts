@@ -17,9 +17,21 @@ const SignIn = () => {
 			setError('');
 			setLoading(true);
 			await signin(email, password);
-		} catch {
+		} catch (error) {
 			setLoading(false);
-			setError('Faild to Sign in!');
+			switch (error.code) {
+				case 'auth/user-not-found':
+					setError('User not found. Please check your email or sign up for an account.');
+					break;
+				case 'auth/invalid-password':
+					setError('Incorrect password. Please enter the correct password.');
+					break;
+				case 'auth/invalid-email':
+					setError('Invalid email address. Please enter a valid email.');
+					break;
+				default:
+					setError('Failed to sign in. Please try again later.');
+			}
 		}
 	};
 
